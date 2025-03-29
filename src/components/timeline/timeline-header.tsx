@@ -17,12 +17,15 @@ export function TimelineHeader({
 
 	return (
 		<div
-			className="grid sticky top-0 z-10"
+			className="sticky top-0 z-20"
 			style={{
 				gridTemplateColumns: `250px repeat(${numberOfDays}, 1fr)`,
+				display: 'grid',
 			}}
 		>
-			<div className="bg-gray-50 p-4 border-b border-r font-medium">Name</div>
+			<div className="bg-gray-50 p-4 border-b border-r font-medium sticky left-0">
+				Name
+			</div>
 			{dates.map((date) => (
 				<div
 					key={format(date, 'yyyy-MM-dd')}

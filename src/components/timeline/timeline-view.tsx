@@ -41,17 +41,21 @@ export function TimelineView({
 	return (
 		<div
 			ref={containerRef}
-			className={`relative overflow-auto border rounded-lg ${className}`}
+			className={`relative border rounded-lg ${className}`}
 		>
-			<TimelineHeader numberOfDays={numberOfDays} startDate={startDate} />
-			<div style={containerStyle} className="relative">
-				<TimelineGrid
-					resources={virtualResources}
-					events={events}
-					numberOfDays={numberOfDays}
-					startDate={startDate}
-					virtualizer={rowVirtualizer}
-				/>
+			<div className="overflow-auto max-h-[calc(100vh-100px)]">
+				<div className="inline-block min-w-full">
+					<TimelineHeader numberOfDays={numberOfDays} startDate={startDate} />
+					<div style={containerStyle} className="relative">
+						<TimelineGrid
+							resources={virtualResources}
+							events={events}
+							numberOfDays={numberOfDays}
+							startDate={startDate}
+							virtualizer={rowVirtualizer}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

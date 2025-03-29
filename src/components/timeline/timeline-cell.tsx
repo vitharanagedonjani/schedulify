@@ -23,7 +23,7 @@ export function TimelineCell({
 	);
 
 	return (
-		<div className="relative p-2 border-b border-r min-h-[60px]" style={style}>
+		<div className="relative border-b border-r h-[60px] p-1" style={style}>
 			{cellEvents.map((event) => (
 				<TimelineEvent key={event.id} event={event} />
 			))}

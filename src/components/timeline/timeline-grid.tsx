@@ -20,15 +20,17 @@ export function TimelineGrid({
 }: TimelineGridProps) {
 	return (
 		<div
-			className="grid"
 			style={{
+				display: 'grid',
 				gridTemplateColumns: `250px repeat(${numberOfDays}, 1fr)`,
+				position: 'relative',
 			}}
 		>
-			{resources.map((resource, index) => (
-				<React.Fragment key={resource.id}>
+			<div className="sticky left-0 z-30 bg-white">
+				{resources.map((resource, index) => (
 					<div
-						className="p-4 border-b border-r"
+						key={resource.id}
+						className="p-4 border-b border-r h-[60px] flex items-center"
 						style={
 							virtualizer
 								? {
@@ -36,8 +38,6 @@ export function TimelineGrid({
 											virtualizer.getVirtualItems()[index].start
 										}px)`,
 										position: 'absolute',
-										top: 0,
-										left: 0,
 										width: '250px',
 									}
 								: undefined
@@ -45,30 +45,43 @@ export function TimelineGrid({
 					>
 						{resource.name}
 					</div>
-					{Array.from({ length: numberOfDays }).map((_, dayIndex) => (
-						<TimelineCell
-							key={`${resource.id}-${dayIndex}`}
-							resourceId={resource.id}
-							date={
-								new Date(startDate.getTime() + dayIndex * 24 * 60 * 60 * 1000)
-							}
-							events={events}
-							style={
-								virtualizer
-									? {
-											transform: `translateY(${
-												virtualizer.getVirtualItems()[index].start
-											}px)`,
-											position: 'absolute',
-											left: `calc(250px + ${dayIndex * 100}% / ${numberOfDays})`,
-											width: `${100 / numberOfDays}%`,
-										}
-									: undefined
-							}
-						/>
+				))}
+			</div>
+			<div className="col-span-full col-start-2 z-20">
+				<div
+					className="grid"
+					style={{ gridTemplateColumns: `repeat(${numberOfDays}, 1fr)` }}
+				>
+					{resources.map((resource, index) => (
+						<React.Fragment key={resource.id}>
+							{Array.from({ length: numberOfDays }).map((_, dayIndex) => (
+								<TimelineCell
+									key={`${resource.id}-${dayIndex}`}
+									resourceId={resource.id}
+									date={
+										new Date(
+											startDate.getTime() + dayIndex * 24 * 60 * 60 * 1000
+										)
+									}
+									events={events}
+									style={
+										virtualizer
+											? {
+													transform: `translateY(${
+														virtualizer.getVirtualItems()[index].start
+													}px)`,
+													position: 'absolute',
+													width: `${100 / numberOfDays}%`,
+													left: `${(dayIndex * 100) / numberOfDays}%`,
+												}
+											: undefined
+									}
+								/>
+							))}
+						</React.Fragment>
 					))}
-				</React.Fragment>
-			))}
+				</div>
+			</div>
 		</div>
 	);
 }
