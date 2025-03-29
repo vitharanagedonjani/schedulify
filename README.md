@@ -79,14 +79,21 @@ Customize your calendar with various options:
   - [ ] Add custom hour cell rendering
   - [ ] Add period indicators (Morning, Afternoon, Evening, Night)
 - [ ] Event Configuration and Rendering
-  - [ ] Define event display modes (block, line, custom)
-  - [ ] Configure event styles (colors, borders, etc.)
-  - [ ] Add event templates
-  - [ ] Handle multi-day events
-  - [ ] Handle recurring events
-  - [ ] Configure event overlap behavior
-  - [ ] Add event icons and indicators
-  - [ ] Add event status visualization
+  - Day View Events
+    - [ ] Calculate event positions based on date ranges
+    - [ ] Handle events that span multiple days
+    - [ ] Implement event stacking for same-day events
+    - [ ] Add basic event card with title and time
+    - [ ] Handle event overflow (when too many events in a day)
+    - [ ] Add event truncation with "more" indicator
+  - Hour View Events (upcoming)
+  - Common Features
+    - [ ] Define event display modes (block, line, custom)
+    - [ ] Configure event styles (colors, borders, etc.)
+    - [ ] Add event templates
+    - [ ] Handle recurring events
+    - [ ] Add event icons and indicators
+    - [ ] Add event status visualization
 
 What we've completed so far:
 1. Basic timeline structure with fixed resource column

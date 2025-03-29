@@ -24,6 +24,15 @@ export interface TimelineConfig {
 	timeCellWidth?: number;
 	rowHeight?: number;
 	timeFormat?: TimeFormat;
+	maxEventsPerCell?: number;
+	eventComponent?: React.ComponentType<EventComponentProps>;
+}
+
+export interface EventComponentProps {
+	event: TimelineEvent;
+	isMultiDay: boolean;
+	style: React.CSSProperties;
+	onClick?: (event: TimelineEvent) => void;
 }
 
 export interface FormatOptions {
@@ -40,6 +49,7 @@ export interface TimelineViewProps {
 	formatOptions?: FormatOptions;
 	timelineConfig?: TimelineConfig;
 	className?: string;
+	onEventClick?: (event: TimelineEvent) => void;
 }
 
 export type ViewMode = 'hour' | 'day';

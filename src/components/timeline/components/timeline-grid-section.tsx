@@ -1,8 +1,14 @@
 import * as React from 'react';
 import { format } from 'date-fns';
-import type { Resource, TimelineEvent, TimeFormat } from '../types';
+import type {
+	Resource,
+	TimelineEvent,
+	TimeFormat,
+	EventComponentProps,
+} from '../types';
 import { TIMELINE_CONSTANTS, TIME_FORMATS } from '../constants';
 import { generateHourSlots } from '../utils';
+import { EventLayer } from './event-layer';
 
 interface TimelineGridSectionProps {
 	resources: Resource[];
@@ -12,6 +18,11 @@ interface TimelineGridSectionProps {
 	cellWidth?: number;
 	viewMode: 'day' | 'hour';
 	timeFormat?: TimeFormat;
+	timelineConfig?: {
+		maxEventsPerCell?: number;
+		eventComponent?: React.ComponentType<EventComponentProps>;
+	};
+	onEventClick?: (event: TimelineEvent) => void;
 }
 
 export function TimelineGridSection({
@@ -22,6 +33,8 @@ export function TimelineGridSection({
 	cellWidth = TIMELINE_CONSTANTS.DEFAULT_TIME_CELL_WIDTH,
 	viewMode,
 	timeFormat = TIMELINE_CONSTANTS.DEFAULT_TIME_FORMAT,
+	timelineConfig,
+	onEventClick,
 }: TimelineGridSectionProps) {
 	const hourSlots = React.useMemo(
 		() => (viewMode === 'hour' ? generateHourSlots(startDate, timeFormat) : []),
@@ -35,10 +48,10 @@ export function TimelineGridSection({
 
 	return (
 		<div className="flex-1 overflow-auto">
-			{/* Timeline Header */}
+			{/* Fixed Header */}
 			<div
-				className="sticky top-0 z-10 bg-gray-50 border-b"
-				style={{ height: TIMELINE_CONSTANTS.HEADER_HEIGHT, width: gridWidth }}
+				className="sticky top-0 z-20 bg-gray-50 border-b"
+				style={{ width: gridWidth, height: TIMELINE_CONSTANTS.HEADER_HEIGHT }}
 			>
 				<div className="flex h-full">
 					{viewMode === 'hour'
@@ -78,13 +91,13 @@ export function TimelineGridSection({
 				</div>
 			</div>
 
-			{/* Timeline Grid */}
-			<div className="relative" style={{ width: gridWidth }}>
+			{/* Scrollable Content Container */}
+			<div style={{ position: 'relative', width: gridWidth }}>
+				{/* Grid Lines */}
 				{resources.map((resource) => (
 					<div key={resource.id} className="flex border-b">
 						{viewMode === 'hour'
-							? // Hour view grid
-								hourSlots.map((slot) => (
+							? hourSlots.map((slot) => (
 									<div
 										key={`cell-${resource.id}-hour-${slot.hour}`}
 										className="border-r"
@@ -96,8 +109,7 @@ export function TimelineGridSection({
 										}}
 									/>
 								))
-							: // Day view grid (existing code)
-								Array.from({ length: numberOfDays }).map((_, index) => (
+							: Array.from({ length: numberOfDays }).map((_, index) => (
 									<div
 										key={`cell-${resource.id}-day-${index}`}
 										className="border-r"
@@ -111,6 +123,20 @@ export function TimelineGridSection({
 								))}
 					</div>
 				))}
+
+				{/* Events Layer */}
+				<div className="absolute top-0 left-0 w-full h-full">
+					<EventLayer
+						events={events}
+						resources={resources}
+						startDate={startDate}
+						numberOfDays={numberOfDays}
+						cellWidth={cellWidth}
+						maxEventsPerCell={timelineConfig?.maxEventsPerCell}
+						EventComponent={timelineConfig?.eventComponent}
+						onEventClick={onEventClick}
+					/>
+				</div>
 			</div>
 		</div>
 	);
