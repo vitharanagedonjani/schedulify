@@ -1,13 +1,27 @@
 import * as React from 'react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 
 interface TimelineHeaderProps {
-	dates: Date[];
+	numberOfDays: number;
+	startDate: Date;
 }
 
-export function TimelineHeader({ dates }: TimelineHeaderProps) {
+export function TimelineHeader({
+	numberOfDays,
+	startDate,
+}: TimelineHeaderProps) {
+	const dates = React.useMemo(
+		() => Array.from({ length: numberOfDays }, (_, i) => addDays(startDate, i)),
+		[startDate, numberOfDays]
+	);
+
 	return (
-		<div className="contents">
+		<div
+			className="grid sticky top-0 z-10"
+			style={{
+				gridTemplateColumns: `250px repeat(${numberOfDays}, 1fr)`,
+			}}
+		>
 			<div className="bg-gray-50 p-4 border-b border-r font-medium">Name</div>
 			{dates.map((date) => (
 				<div

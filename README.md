@@ -65,6 +65,11 @@ Customize your calendar with various options:
 - [x] Handle event overlapping
 - [x] Add event click interactions
 - [x] Implement accessibility features
+- [x] Refactor timeline component into smaller, modular components
+- [x] Set up test environment with Vite
+- [x] Create test data generation for performance testing (1000 resources, 10,000 events)
+- [x] Configure Tailwind CSS with proper setup
+- [x] Implement initial virtualization setup with TanStack Virtual
 
 ### Phase 3: Current Focus
 - [ ] Add drag-and-drop event resizing

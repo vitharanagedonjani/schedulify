@@ -14,10 +14,17 @@ export interface Resource {
 	color?: string;
 }
 
+export interface VirtualizationOptions {
+	enabled: boolean;
+	rowHeight?: number;
+	overscan?: number;
+}
+
 export interface TimelineViewProps {
 	events: TimelineEvent[];
 	resources: Resource[];
 	startDate?: Date;
 	numberOfDays?: number;
 	className?: string;
+	virtualization?: VirtualizationOptions;
 }
