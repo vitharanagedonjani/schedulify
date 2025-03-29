@@ -133,12 +133,13 @@ export function EventLayer({
 														className="absolute pointer-events-auto"
 														style={{
 															left: event.dayIndex * cellWidth + 4,
-															top: 4 + event.stackIndex * individualEventHeight,
+															top: 2 + event.stackIndex * 50, // 50px = 48px height + 2px spacing
 															width: Math.min(
 																event.durationDays * cellWidth - 8,
 																(numberOfDays - event.dayIndex) * cellWidth - 8
 															),
-															height: individualEventHeight - 2,
+															height: 48, // Fixed height of 48px
+															minHeight: 48, // Ensure minimum height
 														}}
 													>
 														<EventComponent

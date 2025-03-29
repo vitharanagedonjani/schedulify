@@ -25,7 +25,7 @@ interface TimelineGridSectionProps {
 	};
 	onEventClick?: (event: TimelineEvent) => void;
 	rowHeights: Map<string, number>;
-	scrollContainer: React.RefObject<HTMLDivElement>;
+	scrollContainer: React.RefObject<HTMLDivElement | null>;
 }
 
 export function TimelineGridSection({

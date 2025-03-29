@@ -25,11 +25,66 @@ export function TimelineView({
 	// Initialize rowHeights with default values
 	const rowHeights = React.useMemo(() => {
 		const heights = new Map<string, number>();
-		for (const resource of resources) {
-			heights.set(resource.id, TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT);
+		const eventsPerDay = new Map<string, Map<number, number>>();
+
+		// Count events per resource per day
+		for (const event of events) {
+			const eventStart = new Date(event.start);
+			const dayIndex = Math.floor(
+				(eventStart.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+			);
+
+			// Initialize day counter for resource
+			if (!eventsPerDay.has(event.resourceId)) {
+				eventsPerDay.set(event.resourceId, new Map());
+			}
+			const resourceDays = eventsPerDay.get(event.resourceId)!;
+
+			// Count events per day
+			const currentCount = resourceDays.get(dayIndex) || 0;
+			resourceDays.set(dayIndex, currentCount + 1);
 		}
+
+		// Calculate heights based on maximum events per day
+		for (const resource of resources) {
+			const resourceDays = eventsPerDay.get(resource.id);
+			const maxEventsPerCell = timelineConfig.maxEventsPerCell ?? 3;
+			const baseHeight =
+				timelineConfig.baseRowHeight ?? TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT;
+			const eventHeight =
+				timelineConfig.eventHeight ?? TIMELINE_CONSTANTS.DEFAULT_EVENT_HEIGHT;
+
+			if (!resourceDays || resourceDays.size === 0) {
+				// No events - use base height
+				heights.set(resource.id, baseHeight);
+				continue;
+			}
+
+			// Find the maximum number of events in any day
+			const maxEventsInDay = Math.max(...Array.from(resourceDays.values()));
+
+			if (maxEventsInDay <= maxEventsPerCell) {
+				// No stacking needed - use base height
+				heights.set(resource.id, baseHeight);
+				continue;
+			}
+
+			// Calculate height for stacked events
+			const rowsNeeded = Math.ceil(maxEventsInDay / maxEventsPerCell);
+			const totalHeight = rowsNeeded * (eventHeight + 8); // 8px padding
+
+			heights.set(resource.id, Math.max(baseHeight, totalHeight));
+		}
+
 		return heights;
-	}, [resources]);
+	}, [
+		resources,
+		events,
+		startDate,
+		timelineConfig.maxEventsPerCell,
+		timelineConfig.baseRowHeight,
+		timelineConfig.eventHeight,
+	]);
 
 	const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -57,14 +112,4 @@ export function TimelineView({
 			</div>
 		</div>
 	);
-}
-
-// Helper function
-function areDatesOverlapping(
-	start1: Date,
-	end1: Date,
-	start2: Date,
-	end2: Date
-) {
-	return start1 < end2 && start2 < end1;
 }

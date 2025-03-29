@@ -124,7 +124,8 @@ export function TimelineTest() {
 					}}
 					timelineConfig={{
 						timeCellWidth: activeView === 'hour' ? 150 : 100, // Smaller width for day view
-						rowHeight: 52,
+						baseRowHeight: 52,
+						eventHeight: 48,
 					}}
 				/>
 			</div>
