@@ -63,7 +63,9 @@ Customize your calendar with various options:
   - [x] Add configurable time slots for day view based on numberOfDays
   - [x] Implement horizontal scrolling
   - [x] Create basic grid structure
-  - [ ] Add day header formatting options (MM/DD, DD/MM, etc.)
+  - [x] Add basic event rendering
+  - [x] Implement dynamic row heights for stacked events
+  - [x] Add day header formatting options (MM/DD, DD/MM, etc.)
   - [ ] Add support for week numbers
   - [ ] Add support for working days only view
   - [ ] Add support for custom day cell rendering
@@ -78,18 +80,23 @@ Customize your calendar with various options:
   - [ ] Add current time indicator
   - [ ] Add custom hour cell rendering
   - [ ] Add period indicators (Morning, Afternoon, Evening, Night)
-- [ ] Event Configuration and Rendering
+- [x] Event Configuration and Rendering
   - Day View Events
-    - [ ] Calculate event positions based on date ranges
-    - [ ] Handle events that span multiple days
-    - [ ] Implement event stacking for same-day events
-    - [ ] Add basic event card with title and time
-    - [ ] Handle event overflow (when too many events in a day)
-    - [ ] Add event truncation with "more" indicator
-  - Hour View Events (upcoming)
+    - [x] Calculate event positions based on date ranges
+    - [x] Handle events that span multiple days
+    - [x] Implement proper event stacking
+      - [x] Dynamic row height adjustment
+      - [x] Maintain row height sync between resource and timeline
+    - [x] Add basic event card with title and time
+    - [x] Handle event overflow (when too many events in a day)
+    - [x] Add event truncation with "more" indicator
+  - Hour View Events
+    - [x] Basic event positioning in hour slots
+    - [x] Event stacking in hour view
+    - [ ] Multi-hour event rendering
   - Common Features
-    - [ ] Define event display modes (block, line, custom)
-    - [ ] Configure event styles (colors, borders, etc.)
+    - [x] Define event display modes (block, line, custom)
+    - [x] Configure event styles (colors, borders, etc.)
     - [ ] Add event templates
     - [ ] Handle recurring events
     - [ ] Add event icons and indicators
@@ -107,39 +114,29 @@ What we've completed so far:
 5. Consistent cell sizing and alignment
 6. Resource list with configurable width
 7. Sticky headers for both resource and timeline sections
-
-Usage example:
-```typescript
-<TimelineView
-  resources={resources}
-  events={events}
-  startDate={new Date()}
-  numberOfDays={30}
-  viewMode="day" // or "hour"
-  timelineConfig={{
-    timeCellWidth: 100,
-    resourceCellWidth: 200,
-    rowHeight: 60,
-    timeFormat: {
-      type: '24', // or '12'
-      showAMPM: true, // Only for 12-hour format
-    }
-  }}
-/>
-```
+8. Synchronized scrolling between resource and timeline sections
+9. Dynamic row heights based on event stacking
+10. Event overflow handling with "more" indicators
+11. Customizable event components
+12. Proper TypeScript types and interfaces
 
 Next steps:
 1. Add working hours highlighting for hour view
 2. Implement current time indicator
 3. Add period indicators
-4. Begin event rendering implementation
+4. Implement event resizing and dragging
+5. Add event creation and editing capabilities
+6. Implement zoom levels for different time scales
+7. Add keyboard navigation
+8. Add support for recurring events
+9. Implement resource grouping
+10. Add event dependencies and conflict detection
 
 ### Phase 3: Current Focus
 - [ ] Add drag-and-drop event resizing
 - [ ] Implement event creation
 - [ ] Add event editing capabilities
 - [ ] Implement zoom levels for different time scales
-- [ ] Add keyboard navigation
 - [x] Implement event tooltips and details view
 - [x] Improve test data generation and event positioning
 

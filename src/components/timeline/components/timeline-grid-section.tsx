@@ -21,8 +21,11 @@ interface TimelineGridSectionProps {
 	timelineConfig?: {
 		maxEventsPerCell?: number;
 		eventComponent?: React.ComponentType<EventComponentProps>;
+		eventHeight?: number;
 	};
 	onEventClick?: (event: TimelineEvent) => void;
+	rowHeights: Map<string, number>;
+	scrollContainer: React.RefObject<HTMLDivElement>;
 }
 
 export function TimelineGridSection({
@@ -35,6 +38,8 @@ export function TimelineGridSection({
 	timeFormat = TIMELINE_CONSTANTS.DEFAULT_TIME_FORMAT,
 	timelineConfig,
 	onEventClick,
+	rowHeights,
+	scrollContainer,
 }: TimelineGridSectionProps) {
 	const hourSlots = React.useMemo(
 		() => (viewMode === 'hour' ? generateHourSlots(startDate, timeFormat) : []),
@@ -47,7 +52,7 @@ export function TimelineGridSection({
 			: cellWidth * numberOfDays;
 
 	return (
-		<div className="flex-1 overflow-auto">
+		<div className="flex-1">
 			{/* Fixed Header */}
 			<div
 				className="sticky top-0 z-20 bg-gray-50 border-b"
@@ -95,29 +100,38 @@ export function TimelineGridSection({
 			<div style={{ position: 'relative', width: gridWidth }}>
 				{/* Grid Lines */}
 				{resources.map((resource) => (
-					<div key={resource.id} className="flex border-b">
+					<div
+						key={resource.id}
+						className="flex border-b"
+						style={{
+							height:
+								rowHeights.get(resource.id) ??
+								TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
+							minHeight: TIMELINE_CONSTANTS.DEFAULT_EVENT_HEIGHT,
+						}}
+					>
 						{viewMode === 'hour'
 							? hourSlots.map((slot) => (
 									<div
 										key={`cell-${resource.id}-hour-${slot.hour}`}
-										className="border-r"
+										className="border-r border-gray-200"
 										style={{
 											width: cellWidth,
 											minWidth: cellWidth,
 											maxWidth: cellWidth,
-											height: TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
+											height: '100%',
 										}}
 									/>
 								))
 							: Array.from({ length: numberOfDays }).map((_, index) => (
 									<div
 										key={`cell-${resource.id}-day-${index}`}
-										className="border-r"
+										className="border-r border-gray-200"
 										style={{
 											width: cellWidth,
 											minWidth: cellWidth,
 											maxWidth: cellWidth,
-											height: TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
+											height: '100%',
 										}}
 									/>
 								))}
@@ -132,9 +146,14 @@ export function TimelineGridSection({
 						startDate={startDate}
 						numberOfDays={numberOfDays}
 						cellWidth={cellWidth}
+						eventHeight={
+							timelineConfig?.eventHeight ??
+							TIMELINE_CONSTANTS.DEFAULT_EVENT_HEIGHT
+						}
 						maxEventsPerCell={timelineConfig?.maxEventsPerCell}
 						EventComponent={timelineConfig?.eventComponent}
 						onEventClick={onEventClick}
+						rowHeights={rowHeights}
 					/>
 				</div>
 			</div>

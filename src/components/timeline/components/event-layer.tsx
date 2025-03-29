@@ -9,9 +9,11 @@ interface EventLayerProps {
 	startDate: Date;
 	numberOfDays: number;
 	cellWidth: number;
+	eventHeight: number;
 	maxEventsPerCell?: number;
 	EventComponent?: React.ComponentType<EventComponentProps>;
 	onEventClick?: (event: TimelineEvent) => void;
+	rowHeights: Map<string, number>;
 }
 
 interface PositionedEvent extends TimelineEvent {
@@ -27,9 +29,11 @@ export function EventLayer({
 	startDate,
 	numberOfDays,
 	cellWidth,
+	eventHeight,
 	maxEventsPerCell = 3,
 	EventComponent = DefaultEvent,
 	onEventClick,
+	rowHeights = new Map(),
 }: EventLayerProps) {
 	// Step 1: Calculate event positions and group by resource and day
 	const eventsByResource = React.useMemo(() => {
@@ -100,23 +104,26 @@ export function EventLayer({
 						const resourceIndex = resources.findIndex(
 							(r) => r.id === resourceId
 						);
+						const rowHeight =
+							rowHeights.get(resourceId) ??
+							TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT;
 
 						return (
 							<div
 								key={resourceId}
 								className="absolute w-full"
 								style={{
-									top: resourceIndex * TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
-									height: TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
+									top: resourceIndex * rowHeight,
+									height: rowHeight,
 								}}
 							>
 								{Array.from(resourceEvents.entries()).map(
 									([dayIndex, dayEvents]) => {
 										const visibleEvents = dayEvents.slice(0, maxEventsPerCell);
 										const hasMore = dayEvents.length > maxEventsPerCell;
-										const eventHeight =
-											(TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT - 8) /
-											maxEventsPerCell;
+										const availableHeight = rowHeight - 8; // Subtract padding
+										const individualEventHeight =
+											availableHeight / maxEventsPerCell;
 
 										return (
 											<React.Fragment key={`${resourceId}-${dayIndex}`}>
@@ -126,12 +133,12 @@ export function EventLayer({
 														className="absolute pointer-events-auto"
 														style={{
 															left: event.dayIndex * cellWidth + 4,
-															top: 4 + event.stackIndex * eventHeight,
+															top: 4 + event.stackIndex * individualEventHeight,
 															width: Math.min(
 																event.durationDays * cellWidth - 8,
 																(numberOfDays - event.dayIndex) * cellWidth - 8
 															),
-															height: eventHeight - 2,
+															height: individualEventHeight - 2,
 														}}
 													>
 														<EventComponent
@@ -141,6 +148,7 @@ export function EventLayer({
 																height: '100%',
 																backgroundColor: event.color || '#7c3aed',
 																borderRadius: '4px',
+																boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
 															}}
 															onClick={onEventClick}
 														/>

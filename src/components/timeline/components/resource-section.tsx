@@ -4,30 +4,42 @@ import { TIMELINE_CONSTANTS } from '../constants';
 
 interface ResourceSectionProps {
 	resources: Resource[];
-	width?: number;
+	width: number;
+	rowHeights: Map<string, number>;
+	headerHeight: number;
 }
 
 export function ResourceSection({
 	resources,
-	width = TIMELINE_CONSTANTS.DEFAULT_RESOURCE_WIDTH,
+	width,
+	rowHeights,
+	headerHeight,
 }: ResourceSectionProps) {
 	return (
-		<div className="sticky left-0 z-10 bg-white border-r" style={{ width }}>
-			{/* Resource Header */}
+		<div
+			className="sticky left-0 z-10 bg-white border-r flex-none"
+			style={{ width }}
+		>
+			{/* Fixed Header */}
 			<div
-				className="border-b flex items-center px-4 font-medium bg-gray-50"
-				style={{ height: TIMELINE_CONSTANTS.HEADER_HEIGHT }}
+				className="sticky top-0 z-10 border-b bg-gray-50 flex items-center px-4 font-medium"
+				style={{ height: headerHeight }}
 			>
 				Resources
 			</div>
 
-			{/* Resource List */}
-			<div className="resource-list">
+			{/* Resource List - Remove overflow-y-auto */}
+			<div>
 				{resources.map((resource) => (
 					<div
 						key={resource.id}
 						className="px-4 border-b hover:bg-gray-50 flex items-center"
-						style={{ height: TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT }}
+						style={{
+							height:
+								rowHeights.get(resource.id) ??
+								TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
+							minHeight: TIMELINE_CONSTANTS.DEFAULT_EVENT_HEIGHT,
+						}}
 					>
 						{resource.name}
 					</div>

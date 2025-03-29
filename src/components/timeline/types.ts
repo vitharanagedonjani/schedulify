@@ -19,13 +19,19 @@ export interface TimeFormat {
 	showAMPM?: boolean; // Only applicable for 12-hour format
 }
 
-export interface TimelineConfig {
+export interface RowHeight {
+	resourceId: string;
+	height: number;
+}
+
+export interface TimelineConfig extends Partial<typeof TIMELINE_CONSTANTS> {
 	resourceCellWidth?: number;
 	timeCellWidth?: number;
-	rowHeight?: number;
-	timeFormat?: TimeFormat;
+	baseRowHeight?: number;
+	eventHeight?: number;
 	maxEventsPerCell?: number;
 	eventComponent?: React.ComponentType<EventComponentProps>;
+	timeFormat?: TimeFormat;
 }
 
 export interface EventComponentProps {
@@ -54,5 +60,3 @@ export interface TimelineViewProps {
 
 export type ViewMode = 'hour' | 'day';
 export type DateFormatFn = (date: Date) => string;
-
-export interface TimelineConfig extends Partial<typeof TIMELINE_CONSTANTS> {}

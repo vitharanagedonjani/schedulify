@@ -22,10 +22,26 @@ export function TimelineView({
 	const timeFormat =
 		timelineConfig.timeFormat ?? TIMELINE_CONSTANTS.DEFAULT_TIME_FORMAT;
 
+	// Initialize rowHeights with default values
+	const rowHeights = React.useMemo(() => {
+		const heights = new Map<string, number>();
+		for (const resource of resources) {
+			heights.set(resource.id, TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT);
+		}
+		return heights;
+	}, [resources]);
+
+	const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
 	return (
 		<div className={`relative border rounded-lg overflow-hidden ${className}`}>
-			<div className="flex flex-1">
-				<ResourceSection resources={resources} width={resourceAreaWidth} />
+			<div ref={scrollContainerRef} className="flex flex-1 overflow-y-auto">
+				<ResourceSection
+					resources={resources}
+					width={resourceAreaWidth}
+					rowHeights={rowHeights}
+					headerHeight={TIMELINE_CONSTANTS.HEADER_HEIGHT}
+				/>
 				<TimelineGridSection
 					resources={resources}
 					events={events}
@@ -34,8 +50,21 @@ export function TimelineView({
 					cellWidth={timeCellWidth}
 					viewMode={viewMode}
 					timeFormat={timeFormat}
+					timelineConfig={timelineConfig}
+					rowHeights={rowHeights}
+					scrollContainer={scrollContainerRef}
 				/>
 			</div>
 		</div>
 	);
+}
+
+// Helper function
+function areDatesOverlapping(
+	start1: Date,
+	end1: Date,
+	start2: Date,
+	end2: Date
+) {
+	return start1 < end2 && start2 < end1;
 }
