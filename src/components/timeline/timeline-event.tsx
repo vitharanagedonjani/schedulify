@@ -8,27 +8,44 @@ interface TimelineEventProps {
 }
 
 export function TimelineEvent({ event }: TimelineEventProps) {
-	const startTime = event.start.getHours() + event.start.getMinutes() / 60;
-	const endTime = event.end.getHours() + event.end.getMinutes() / 60;
+	const style = React.useMemo(() => {
+		if (event.isAllDay) {
+			return {
+				position: 'absolute' as const,
+				left: 0,
+				right: 0,
+				top: '4px',
+				bottom: '4px',
+			};
+		}
 
-	// Handle events that cross midnight
-	const width =
-		endTime > startTime ? endTime - startTime : 24 - startTime + endTime;
+		const startTime = event.start.getHours() + event.start.getMinutes() / 60;
+		const endTime = event.end.getHours() + event.end.getMinutes() / 60;
+		const width =
+			endTime > startTime ? endTime - startTime : 24 - startTime + endTime;
+
+		return {
+			position: 'absolute' as const,
+			left: `${(startTime / 24) * 100}%`,
+			width: `${(width / 24) * 100}%`,
+			top: '4px',
+			bottom: '4px',
+		};
+	}, [event]);
 
 	return (
 		<div
 			className="absolute rounded-md text-white text-xs p-1 overflow-hidden"
 			style={{
-				left: `${(startTime / 24) * 100}%`,
-				width: `${(width / 24) * 100}%`,
-				top: '4px',
-				bottom: '4px',
+				...style,
 				backgroundColor: event.color || '#7c3aed',
 			}}
 		>
 			<div className="font-medium truncate">{event.type}</div>
 			<div className="opacity-90 truncate">
-				{format(event.start, 'HH:mm')} - {format(event.end, 'HH:mm')}
+				{event.isAllDay
+					? 'All Day'
+					: `${format(event.start, 'HH:mm')} - ${format(event.end, 'HH:mm')}`}
 			</div>
 		</div>
 	);

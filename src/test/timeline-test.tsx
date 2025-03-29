@@ -91,12 +91,13 @@ export function TimelineTest() {
 					resources={resources}
 					events={events}
 					startDate={new Date()}
-					numberOfDays={7}
+					numberOfDays={30}
 					virtualization={{
 						enabled: true,
 						rowHeight: 60,
 						overscan: 5,
 					}}
+					showAllDayEvents={true}
 				/>
 			</div>
 		</div>

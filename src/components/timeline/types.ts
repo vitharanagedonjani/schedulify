@@ -6,6 +6,7 @@ export interface TimelineEvent {
 	resourceId: string;
 	color?: string;
 	type?: 'Morning' | 'Afternoon' | 'Evening' | 'Night';
+	isAllDay?: boolean;
 }
 
 export interface Resource {
@@ -27,4 +28,5 @@ export interface TimelineViewProps {
 	numberOfDays?: number;
 	className?: string;
 	virtualization?: VirtualizationOptions;
+	showAllDayEvents?: boolean;
 }
