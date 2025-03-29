@@ -11,16 +11,6 @@ A high-performance React scheduler capable of handling 100,000+ events smoothly.
 - 📱 Responsive design
 
 ## Quick Start
-```bash
-# Install dependencies
-bun install
-
-# Start development server
-bun dev
-
-# Build for production
-bun build
-```
 
 ## Usage
 ```typescript
@@ -58,6 +48,42 @@ Customize your calendar with various options:
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari (latest)
+
+## Development Progress
+
+### Phase 1: Project Setup and Basic Structure
+- [x] Initialize project with Bun package manager
+- [x] Set up TypeScript configuration
+- [x] Configure essential dependencies (React, Tailwind CSS)
+- [x] Create basic project structure
+
+### Phase 2: Timeline Component Implementation
+- [x] Create basic TimelineView component structure
+- [x] Implement virtualization using TanStack Virtual
+- [x] Add resource and time slot rendering
+- [x] Implement event positioning and layout
+- [x] Handle event overlapping
+- [x] Add event click interactions
+- [x] Implement accessibility features
+
+### Phase 3: Current Focus
+- [ ] Add drag-and-drop event resizing
+- [ ] Implement event creation
+- [ ] Add event editing capabilities
+- [ ] Implement zoom levels for different time scales
+- [ ] Add keyboard navigation
+- [x] Implement event tooltips and details view
+
+### Phase 4: Planned Features
+- [ ] Add support for recurring events
+- [ ] Implement resource grouping
+- [ ] Add event dependencies
+- [ ] Implement conflict detection
+- [ ] Add export/import functionality
+- [ ] Implement undo/redo functionality
+
+## Contributing
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
 ## License
 MIT
