@@ -17,13 +17,13 @@ export function TimelineHeader({
 
 	return (
 		<div
-			className="sticky top-0 z-20"
+			className="sticky top-0 z-40 bg-white"
 			style={{
-				gridTemplateColumns: `250px repeat(${numberOfDays}, 1fr)`,
 				display: 'grid',
+				gridTemplateColumns: `250px repeat(${numberOfDays}, minmax(200px, 1fr))`,
 			}}
 		>
-			<div className="bg-gray-50 p-4 border-b border-r font-medium sticky left-0">
+			<div className="bg-gray-50 p-4 border-b border-r font-medium sticky left-0 z-50">
 				Name
 			</div>
 			{dates.map((date) => (

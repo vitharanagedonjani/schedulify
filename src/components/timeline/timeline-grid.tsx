@@ -26,6 +26,7 @@ export function TimelineGrid({
 				}}
 			>
 				{Array.from({ length: numberOfDays + 1 }).map((_, i) => (
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					<div key={i} className="border-r border-gray-200" />
 				))}
 			</div>

@@ -92,12 +92,7 @@ export function TimelineTest() {
 					events={events}
 					startDate={new Date()}
 					numberOfDays={30}
-					virtualization={{
-						enabled: true,
-						rowHeight: 60,
-						overscan: 5,
-					}}
-					showAllDayEvents={true}
+					showAllDayEvents={false}
 				/>
 			</div>
 		</div>

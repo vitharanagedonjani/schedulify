@@ -3,13 +3,15 @@ import { format } from 'date-fns';
 import type { TimelineEvent as ITimelineEvent } from './types';
 import { getEventPosition } from './utils';
 
-interface TimelineEventProps {
+export function TimelineEvent({
+	event,
+	showAllDayEvents,
+}: {
 	event: ITimelineEvent;
-}
-
-export function TimelineEvent({ event }: TimelineEventProps) {
+	showAllDayEvents: boolean;
+}) {
 	const style = React.useMemo(() => {
-		if (event.isAllDay) {
+		if (showAllDayEvents) {
 			return {
 				position: 'absolute' as const,
 				left: 0,
@@ -31,7 +33,7 @@ export function TimelineEvent({ event }: TimelineEventProps) {
 			top: '4px',
 			bottom: '4px',
 		};
-	}, [event]);
+	}, [event, showAllDayEvents]);
 
 	return (
 		<div
@@ -43,7 +45,7 @@ export function TimelineEvent({ event }: TimelineEventProps) {
 		>
 			<div className="font-medium truncate">{event.type}</div>
 			<div className="opacity-90 truncate">
-				{event.isAllDay
+				{showAllDayEvents
 					? 'All Day'
 					: `${format(event.start, 'HH:mm')} - ${format(event.end, 'HH:mm')}`}
 			</div>
