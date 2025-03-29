@@ -1,18 +1,18 @@
-import type { TimelineEvent } from './types';
-import { HOURS_IN_DAY, DAY_START_HOUR } from './constants';
+import { format, setHours, setMinutes } from 'date-fns';
+import type { TimeFormat } from './types';
+import { HOURS, TIME_FORMATS } from './constants';
 
-export const getEventPosition = (event: TimelineEvent) => {
-	const startHour = event.start.getHours() + event.start.getMinutes() / 60;
-	const endHour = event.end.getHours() + event.end.getMinutes() / 60;
+export function generateHourSlots(date: Date, timeFormat: TimeFormat) {
+	const hours = timeFormat.type === '24' ? HOURS.FORMAT_24 : HOURS.FORMAT_12;
+	const formatString =
+		timeFormat.type === '24' ? TIME_FORMATS.HOUR_24 : TIME_FORMATS.HOUR_12;
 
-	const startPercent = ((startHour - DAY_START_HOUR) / HOURS_IN_DAY) * 100;
-	const endPercent = ((endHour - DAY_START_HOUR) / HOURS_IN_DAY) * 100;
-
-	return {
-		left: `${startPercent}%`,
-		width: `${endPercent - startPercent}%`,
-		position: 'absolute' as const,
-		top: '4px',
-		bottom: '4px',
-	};
-};
+	return hours.map((hour) => {
+		const slotDate = setMinutes(setHours(new Date(date), hour), 0);
+		return {
+			hour,
+			date: slotDate,
+			label: format(slotDate, formatString),
+		};
+	});
+}
