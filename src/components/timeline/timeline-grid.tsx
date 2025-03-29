@@ -26,7 +26,7 @@ export function TimelineGrid({
 				position: 'relative',
 			}}
 		>
-			<div className="sticky left-0 z-30 bg-white">
+			<div className="sticky left-0 z-10 bg-white">
 				{resources.map((resource, index) => (
 					<div
 						key={resource.id}
@@ -47,7 +47,7 @@ export function TimelineGrid({
 					</div>
 				))}
 			</div>
-			<div className="col-span-full col-start-2 z-20">
+			<div className="col-span-full col-start-2">
 				<div
 					className="grid"
 					style={{ gridTemplateColumns: `repeat(${numberOfDays}, 1fr)` }}

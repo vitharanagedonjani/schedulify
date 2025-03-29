@@ -16,12 +16,12 @@ export function TimelineView({
 		overscan: 5,
 	},
 }: TimelineViewProps) {
-	const containerRef = React.useRef<HTMLDivElement>(null);
+	const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
 	const rowVirtualizer = virtualization.enabled
 		? useVirtualizer({
 				count: resources.length,
-				getScrollElement: () => containerRef.current,
+				getScrollElement: () => scrollContainerRef.current,
 				estimateSize: () => virtualization.rowHeight ?? 60,
 				overscan: virtualization.overscan ?? 5,
 			})
@@ -39,13 +39,13 @@ export function TimelineView({
 		: {};
 
 	return (
-		<div
-			ref={containerRef}
-			className={`relative border rounded-lg ${className}`}
-		>
-			<div className="overflow-auto max-h-[calc(100vh-100px)]">
+		<div className={`relative border rounded-lg ${className}`}>
+			<TimelineHeader numberOfDays={numberOfDays} startDate={startDate} />
+			<div
+				ref={scrollContainerRef}
+				className="overflow-auto max-h-[calc(100vh-100px)]"
+			>
 				<div className="inline-block min-w-full">
-					<TimelineHeader numberOfDays={numberOfDays} startDate={startDate} />
 					<div style={containerStyle} className="relative">
 						<TimelineGrid
 							resources={virtualResources}

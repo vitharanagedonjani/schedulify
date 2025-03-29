@@ -8,22 +8,16 @@ interface TimelineEventProps {
 }
 
 export function TimelineEvent({ event }: TimelineEventProps) {
-	const style = getEventPosition(event);
-
 	return (
 		<div
-			className="absolute rounded-md text-white text-xs p-1 m-1 overflow-hidden"
+			className="absolute rounded bg-purple-600 text-white p-2 text-sm"
 			style={{
-				...style,
-				backgroundColor: event.color || '#7c3aed',
-				minHeight: '24px',
-				maxHeight: 'calc(100% - 8px)',
-				fontSize: '11px',
-				lineHeight: '1.2',
+				...getEventPosition(event),
+				backgroundColor: '#7c3aed',
 			}}
 		>
-			<div className="font-medium truncate">{event.type}</div>
-			<div className="opacity-90 truncate">
+			<div className="font-medium whitespace-nowrap">{event.type}</div>
+			<div className="text-xs opacity-90 whitespace-nowrap">
 				{format(event.start, 'HH:mm')} - {format(event.end, 'HH:mm')}
 			</div>
 		</div>
