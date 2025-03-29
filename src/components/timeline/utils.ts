@@ -16,3 +16,12 @@ export function generateHourSlots(date: Date, timeFormat: TimeFormat) {
 		};
 	});
 }
+
+export function areDatesOverlapping(
+	start1: Date,
+	end1: Date,
+	start2: Date,
+	end2: Date
+): boolean {
+	return start1 < end2 && start2 < end1;
+}
