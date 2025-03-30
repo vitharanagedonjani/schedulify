@@ -81,6 +81,10 @@ Customize your calendar with various options:
     - [x] Events contained within resource rows
     - [x] Proper event stacking within rows
     - [x] Multi-day event spanning
+    - [x] Consistent event spacing and padding
+      - [x] 4px cell edge padding
+      - [x] Proper multi-day event width calculations
+      - [x] Even spacing between stacked events
   - [x] Event styling
     - [x] Configurable colors and borders
     - [x] Custom event components
@@ -98,6 +102,8 @@ What we've completed so far:
 5. Event styling and customization
 6. Synchronized scrolling
 7. TypeScript type safety
+8. Consistent event spacing and alignment
+9. Proper multi-day event rendering
 
 Next steps:
 1. Add working hours highlighting

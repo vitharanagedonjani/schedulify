@@ -25,14 +25,42 @@ export function EventLayer({
 	onEventClick,
 	rowHeights = new Map(),
 }: EventLayerProps) {
+	// Helper function to calculate exact position and width
+	const calculateEventStyle = (event: TimelineEvent, eventIndex: number) => {
+		const startDiff =
+			(event.start.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+
+		const durationDays =
+			Math.ceil(
+				(event.end.getTime() - event.start.getTime()) / (1000 * 60 * 60 * 24)
+			) + 1;
+
+		const width = durationDays * cellWidth - 4;
+		const left = startDiff * cellWidth + 2;
+		const top = eventIndex * (eventHeight + 2); // Stack events vertically
+
+		return {
+			left: Math.round(left),
+			width: Math.max(Math.round(width), cellWidth / 4),
+			top,
+		};
+	};
+
 	return (
 		<>
 			{resources.map((resource) => {
-				const resourceEvents = events.filter(
-					(event) => event.resourceId === resource.id
+				// Filter events for the current resource
+				const resourceEvents = events.filter((event) => {
+					console.log(
+						`Event ID: ${event.id}, Resource ID: ${event.resourceId}, Current Resource: ${resource.id}`
+					);
+					return event.resourceId === resource.id;
+				});
+
+				const rowHeight = Math.max(
+					rowHeights.get(resource.id) ?? TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT,
+					resourceEvents.length * (eventHeight + 2) // Adjust row height
 				);
-				const rowHeight =
-					rowHeights.get(resource.id) ?? TIMELINE_CONSTANTS.DEFAULT_ROW_HEIGHT;
 
 				return (
 					<div
@@ -42,31 +70,27 @@ export function EventLayer({
 							height: rowHeight,
 						}}
 					>
-						{resourceEvents.map((event) => {
-							const startDiff = Math.floor(
-								(event.start.getTime() - startDate.getTime()) /
-									(1000 * 60 * 60 * 24)
-							);
-							const durationDays = Math.ceil(
-								(event.end.getTime() - event.start.getTime()) /
-									(1000 * 60 * 60 * 24)
-							);
+						{resourceEvents.map((event, index) => {
+							const { left, width, top } = calculateEventStyle(event, index);
+							const isMultiDay =
+								event.end.getTime() - event.start.getTime() >
+								24 * 60 * 60 * 1000;
 
 							return (
 								<div
 									key={event.id}
 									className="absolute"
 									style={{
-										left: startDiff * cellWidth + 4,
-										width: durationDays * cellWidth - 8,
+										left: left,
+										width: width,
 										height: eventHeight - 4,
-										top: 2,
-										margin: '2px 0',
+										top: top,
+										margin: '2px',
 									}}
 								>
 									<EventComponent
 										event={event}
-										isMultiDay={durationDays > 1}
+										isMultiDay={isMultiDay}
 										style={{
 											height: '100%',
 											backgroundColor: event.color || '#7c3aed',

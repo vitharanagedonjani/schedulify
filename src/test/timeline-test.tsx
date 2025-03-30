@@ -14,43 +14,57 @@ const SHIFT_COLORS = {
 	Night: '#dc2626', // Red
 };
 
-// Generate 1000 resources
-const resources: Resource[] = Array.from({ length: 1000 }, (_, i) => ({
+// Generate a smaller set of resources for testing
+const resources: Resource[] = Array.from({ length: 15 }, (_, i) => ({
 	id: `r${i + 1}`,
 	name: `Resource ${i + 1}`,
 }));
 
-// Helper function to generate a random date within a range
-function getRandomDate(start: Date, end: Date) {
-	return new Date(
-		start.getTime() + Math.random() * (end.getTime() - start.getTime())
-	);
-}
+const dayEvents: TimelineEvent[] = [
+	// First row events
+	{
+		id: 'event1',
+		resourceId: 'r1',
+		start: new Date('2024-03-29T00:00:00'),
+		end: new Date('2024-03-30T00:00:00'),
+		title: '03/29',
+		color: SHIFT_COLORS.Evening,
+	},
+	{
+		id: 'event2',
+		resourceId: 'r1',
+		start: new Date('2024-04-02T00:00:00'),
+		end: new Date('2024-04-05T00:00:00'),
+		title: '04/02 - 04/05',
+		color: SHIFT_COLORS.Afternoon,
+	},
+	{
+		id: 'event3',
+		resourceId: 'r1',
+		start: new Date('2024-04-03T00:00:00'),
+		end: new Date('2024-04-04T00:00:00'),
+		title: '04/03 - 04/04',
+		color: SHIFT_COLORS.Morning,
+	},
 
-// Generate day-based events (4-5 events per resource within 30 days)
-const dayEvents: TimelineEvent[] = resources.flatMap((resource) => {
-	// Generate 4-5 events for each resource
-	const numberOfEvents = 4 + Math.floor(Math.random() * 2);
-	const startDate = new Date();
-	const endDate = addDays(startDate, 30);
-
-	return Array.from({ length: numberOfEvents }, (_, i) => {
-		const eventStart = getRandomDate(startDate, endDate);
-		const durationDays = 1 + Math.floor(Math.random() * 3); // 1-3 days duration
-
-		return {
-			id: `e${resource.id}-${i}`,
-			resourceId: resource.id,
-			start: eventStart,
-			end: addDays(eventStart, durationDays),
-			title: `Event ${i + 1}`,
-			color:
-				SHIFT_COLORS[
-					SHIFT_TYPES[Math.floor(Math.random() * SHIFT_TYPES.length)]
-				],
-		};
-	});
-});
+	// Second row events
+	{
+		id: 'event4',
+		resourceId: 'r2',
+		start: new Date('2024-03-30T00:00:00'),
+		end: new Date('2024-04-01T00:00:00'),
+		title: '03/30 - 04/01',
+		color: SHIFT_COLORS.Morning,
+	},
+	{
+		id: 'event5',
+		resourceId: 'r2',
+		start: new Date('2024-04-08T12:00:00'),
+		end: new Date('2024-04-08T16:00:00'),
+		title: '04/08 (12:00) - 04/08 (16:00)',
+		color: SHIFT_COLORS.Morning,
+	},
+];
 
 // Generate hour-based events (for the current day)
 const hourEvents: TimelineEvent[] = resources.flatMap((resource) => {
@@ -112,18 +126,15 @@ export function TimelineTest() {
 				<TimelineView
 					resources={resources}
 					events={activeView === 'hour' ? hourEvents : dayEvents}
-					startDate={new Date()}
-					numberOfDays={activeView === 'hour' ? 1 : 30}
+					startDate={new Date('2024-03-29T00:00:00')} // Exact start date
+					numberOfDays={15} // Show exactly 15 days
 					viewMode={activeView}
 					formatOptions={{
-						dateFormat: (date) =>
-							activeView === 'hour'
-								? format(date, 'MMM dd')
-								: format(date, 'dd/MM'),
+						dateFormat: (date) => format(date, 'MMM dd'),
 						timeFormat: (date) => format(date, 'HH:mm'),
 					}}
 					timelineConfig={{
-						timeCellWidth: activeView === 'hour' ? 150 : 100, // Smaller width for day view
+						timeCellWidth: 100,
 						baseRowHeight: 52,
 						eventHeight: 48,
 					}}

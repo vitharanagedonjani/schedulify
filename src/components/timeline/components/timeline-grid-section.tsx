@@ -39,7 +39,6 @@ export function TimelineGridSection({
 	timelineConfig,
 	onEventClick,
 	rowHeights,
-	scrollContainer,
 }: TimelineGridSectionProps) {
 	const hourSlots = React.useMemo(
 		() => (viewMode === 'hour' ? generateHourSlots(startDate, timeFormat) : []),
@@ -144,7 +143,6 @@ export function TimelineGridSection({
 						events={events}
 						resources={resources}
 						startDate={startDate}
-						numberOfDays={numberOfDays}
 						cellWidth={cellWidth}
 						eventHeight={
 							timelineConfig?.eventHeight ??
